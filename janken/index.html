@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- リセットcss読み込み -->
+    <link rel="stylesheet" href="css/reset.css">
+    <!-- style.css読み込み -->
+    <link rel="stylesheet" href="css/style.css">
+    <!-- jquery読み込み -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <title>ジャンケンゲーム</title>
+</head>
+<body>
+    <!-- タイトルエリア -->
+    <div class="main">
+        <h1 class="title">ジャンケンゲーム</h1>
+    </div>
+
+    <!-- 相手 -->
+    <div class="aite">
+        <!-- <h1 class="aite--title">ラスボス</h1> -->
+        <li id="lastboss" style="display: none;"><p><img class="aite--img" src="images/lastboss.png" alt="ラスボス" ></p></li>
+        <li id="win" style="display: none;"><p><img src="images/text_gameclear_e.png" alt="" class="win--img"></p></li>
+        <li id="lose" style="display: none;"><p><img src="images/text_gameover_e.png" alt="" class="lose-img"></p></li>
+    </div>
+    
+    <!-- 結果表示エリア -->
+    <div class="result">
+       <h2 class="text"></h2>
+       <p class="result-img"></p>
+       <div class="result-text"></div>
+       <div class="result-hp"></div>
+     </div>
+
+    <!-- 入力エリア -->
+    <div class="my-hand">
+        <ul class="hand-list">
+            <li id="gu" class="hand" value="1"><p><img class="hand-img" src="images/gu.png" alt=""></p></li>
+            <li id="choki" class="hand" value="2"><p><img class="hand-img" src="images/choki.png" alt=""></p></li>
+            <li id="pa" class="hand" value="3"><p><img class="hand-img" src="images/pa.png" alt=""></p></li>
+        </ul>
+    </div>
+
+<!-- ここからjs -->
+<script>
+
+//ラスボス登場
+$('#lastboss').fadeIn(7000);
+
+//ＨＰ設定
+let hpyou = 3;
+let hpboss = 3;
+
+ //グーボタンが押された時の処理
+ $('#gu').on('click',function (){
+    //相手の数字
+    let aite_num = Math.ceil(Math.random()*3);
+
+    //勝敗表示処理（アラート）
+    //相手が出した手を表示する処理
+    switch(aite_num){
+        case 1:
+            $('.result-text').html('攻撃をかわされた');
+            $('.result-hp').html('Ｂｏｓｓ　ＨＰ' + hpboss + '　ｖｓ　' + 'Ｙｏｕ　ＨＰ' + hpyou);
+            $('.result-img').html('<img src="images/gu.png" alt="">');
+            break;
+        case 2:
+            $('.result-text').html('HIT!!');
+            $('.result-img').html('<img src="images/choki.png" alt="">');
+            hpboss = hpboss - 1; //ダメージ
+            $('.result-hp').html('Ｂｏｓｓ　ＨＰ' + hpboss + '　ｖｓ　' + 'Ｙｏｕ　ＨＰ' + hpyou);
+            console.log("hpboss" + hpboss);
+            // 勝ち負け判定
+            if (hpboss == 0){
+                $('#lastboss').fadeOut(3000);//ボス消える
+                $('#win').fadeIn(7000);//勝利
+            };
+            break;
+        case 3:
+            $('.result-text').html('ダメージをくらった');
+            $('.result-img').html('<img src="images/pa.png" alt="">');
+            hpyou = hpyou - 1;　//ダメージ
+            $('.result-hp').html('Ｂｏｓｓ　ＨＰ' + hpboss + '　ｖｓ　' + 'Ｙｏｕ　ＨＰ' + hpyou);
+            console.log("hpyou" + hpyou);            
+            // 勝ち負け判定
+            if(hpyou == 0){
+                $('#lose').fadeIn(3000);//敗北
+            };
+            break;
+        default:
+            break;
+    }
+});
+
+
+//チョキボタンが押された時の処理
+$('#choki').on('click',function(){
+    //相手の数字
+    let aite_num = Math.ceil(Math.random()*3);
+ 
+    //勝敗表示処理（アラート）
+    //相手が出した手を表示する処理
+    switch(aite_num){
+        case 1:
+            $('.result-text').html('ダメージをくらった');
+            $('.result-img').html('<img src="images/gu.png" alt="">');
+            hpyou = hpyou - 1; //ダメージ
+            $('.result-hp').html('Ｂｏｓｓ　ＨＰ' + hpboss + '　ｖｓ　' + 'Ｙｏｕ　ＨＰ' + hpyou);
+            console.log("hpyou" + hpyou);            
+            // 勝ち負け判定
+            if(hpyou == 0){
+                $('#lose').fadeIn(3000);//敗北
+            };
+            break;
+        case 2:
+            $('.result-text').html('攻撃をかわされた');
+            $('.result-hp').html('Ｂｏｓｓ　ＨＰ' + hpboss + '　ｖｓ　' + 'Ｙｏｕ　ＨＰ' + hpyou);
+            $('.result-img').html('<img src="images/choki.png" alt="">');
+            break;
+        case 3:
+            $('.result-text').html('HIT!!');
+            $('.result-img').html('<img src="images/pa.png" alt="">');
+            hpboss = hpboss - 1;//ダメージ
+            $('.result-hp').html('Ｂｏｓｓ　ＨＰ' + hpboss + '　ｖｓ　' + 'Ｙｏｕ　ＨＰ' + hpyou);
+            console.log("hpboss" + hpboss);
+             // 勝ち負け判定
+            if (hpboss == 0){
+                $('#lastboss').fadeOut(3000);//ボス消える
+                $('#win').fadeIn(7000);//勝利
+            }
+            break;
+        default:
+            break;
+    }
+});
+//パーボタンが押された時の処理
+$('#pa').on('click',function(){
+    //相手の数字
+    let aite_num = Math.ceil(Math.random()*3);
+ 
+    //勝敗表示処理（アラート）
+    //相手が出した手を表示する処理
+    switch(aite_num){
+        case 1:
+            $('.result-text').html('HIT!!');
+            $('.result-img').html('<img src="images/gu.png" alt="">');
+            hpboss = hpboss - 1;//ダメージ
+            $('.result-hp').html('Ｂｏｓｓ　ＨＰ' + hpboss + '　ｖｓ　' + 'Ｙｏｕ　ＨＰ' + hpyou);
+            console.log("hpboss" + hpboss);
+            // 勝ち負け判定
+            if (hpboss == 0){
+                $('#lastboss').fadeOut(3000);//ボス消える
+                $('#win').fadeIn(7000);//勝利
+            }
+            break;
+        case 2:
+            $('.result-text').html('ダメージをくらった');
+            $('.result-img').html('<img src="images/choki.png" alt="">');      
+            hpyou = hpyou - 1;//ダメージ
+            $('.result-hp').html('Ｂｏｓｓ　ＨＰ' + hpboss + '　ｖｓ　' + 'Ｙｏｕ　ＨＰ' + hpyou);
+            console.log("hpyou" + hpyou);            
+            // 勝ち負け判定
+            if(hpyou == 0){
+                $('#lose').fadeIn(3000);//敗北
+            }
+            break;
+        case 3:
+            $('.result-text').html('攻撃をかわされた');
+            $('.result-hp').html('Ｂｏｓｓ　ＨＰ' + hpboss + '　ｖｓ　' + 'Ｙｏｕ　ＨＰ' + hpyou);
+            $('.result-img').html('<img src="images/pa.png" alt="">');
+            break;
+        default:
+            break;
+    }
+});
+
+</script>
+</body>
+</html>
